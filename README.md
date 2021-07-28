@@ -17,7 +17,6 @@
 
 - has_many :items
 - has_many :orders
-- has_many :addresses, through: :orders
 
 ## Itemテーブル
 
@@ -28,7 +27,7 @@
 | category_id         | integer    | null: false                    |
 | status_id           | integer    | null: false                    |
 | delivery_pay_id     | integer    | null: false                    |
-| owner_region_id     | integer    | null: false                    |
+| prefecture_id       | integer    | null: false                    |
 | expected_waiting_id | integer    | null: false                    |
 | price               | integer    | null: false                    |
 | user                | references | null: false, foreign_key: true |
@@ -37,7 +36,6 @@
 
 - belongs_to :user
 - has_one :order
-- has_one :address, through: :order
 - has_one_attached :image
 
 ## Orderテーブル
@@ -68,5 +66,3 @@
 ### Association
 
 - belongs_to :order
-- belongs_to :user, through: :order
-- belongs_to :item, through: :order
