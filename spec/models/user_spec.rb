@@ -10,12 +10,12 @@ RSpec.describe User, type: :model do
     end
     describe '新規登録/ユーザー情報のバリデーション' do
       it 'ニックネームが必須であること。' do
-        @user.nickname = ""
+        @user.nickname = ''
         @user.valid?
         expect(@user.errors.full_messages).to include("Nickname can't be blank")
       end
       it 'メールアドレスが必須であること。' do
-        @user.email = ""
+        @user.email = ''
         @user.valid?
         expect(@user.errors.full_messages).to include("Email can't be blank")
       end
@@ -23,35 +23,80 @@ RSpec.describe User, type: :model do
         @user2 = FactoryBot.create(:user)
         @user.email = @user2.email
         @user.valid?
-        expect(@user.errors.full_messages).to include("Email has already been taken")
+        expect(@user.errors.full_messages).to include('Email has already been taken')
       end
       it 'メールアドレスは、@を含む必要があること。' do
-        @user.email = "hogehoge"
+        @user.email = 'hogehoge'
         @user.valid?
-        expect(@user.errors.full_messages).to include("Email is invalid")
+        expect(@user.errors.full_messages).to include('Email is invalid')
       end
       it 'パスワードが必須であること。' do
-        @user.password = ""
+        @user.password = ''
         @user.valid?
         expect(@user.errors.full_messages).to include("Password can't be blank")
       end
       it 'パスワードは、6文字以上での入力が必須であること' do
-        @user.password = "xx2xx"
+        @user.password = 'xx2xx'
         @user.valid?
-        expect(@user.errors.full_messages).to include("Password is too short (minimum is 6 characters)")
+        expect(@user.errors.full_messages).to include('Password is too short (minimum is 6 characters)')
       end
       it 'パスワードは、半角英数字混合での入力が必須であること' do
-        @user.password = "xxxxxxx"
+        @user.password = 'xxxxxxx'
         @user.valid?
-        expect(@user.errors.full_messages).to include("Password must contain alphabets and numbers")
+        expect(@user.errors.full_messages).to include('Password must contain alphabets and numbers')
       end
       it 'パスワードとパスワード（確認）は、値の一致が必須であること。' do
-        @user.password_confirmation = "xxxxxxx"
+        @user.password_confirmation = 'xxxxxxx'
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
     end
     describe '新規登録/本人確認情報のバリデーション' do
+      it 'お名前(全角)は、名字が必須であること。' do
+        @user.family_name = ''
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Family name can't be blank")
+      end
+      it 'お名前(全角)は、名前が必須であること。' do
+        @user.given_name = ''
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Given name can't be blank")
+      end
+      it 'お名前(全角)の名字は、全角（漢字・ひらがな・カタカナ）での入力が必須であること。' do
+        @user.family_name = Faker::Name.last_name
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Family name ONLY contains full-width characters')
+      end
+      it 'お名前(全角)の名前は、全角（漢字・ひらがな・カタカナ）での入力が必須であること。' do
+        @user.given_name = Faker::Name.first_name
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Given name ONLY contains full-width characters')
+      end
+      it 'お名前カナ(全角)は、名字が必須であること。' do
+        @user.family_reading = ''
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Family reading can't be blank")
+      end
+      it 'お名前カナ(全角)は、名前が必須であること。' do
+        @user.given_reading = ''
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Given reading can't be blank")
+      end
+      it 'お名前カナ(全角)の名字は、全角（漢字・ひらがな・カタカナ）での入力が必須であること。' do
+        @user.family_reading = Faker::Name.last_name
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Family reading ONLY contains full-width katakana characters')
+      end
+      it 'お名前カナ(全角)の名前は、全角（漢字・ひらがな・カタカナ）での入力が必須であること。' do
+        @user.given_reading = Faker::Name.first_name
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Given reading ONLY contains full-width katakana characters')
+      end
+      it '生年月日が必須であること。' do
+        @user.birthday = nil
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Birthday can't be blank")
+      end
     end
   end
 end
