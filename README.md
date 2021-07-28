@@ -2,21 +2,22 @@
 
 ## Userテーブル
 
-| Column             | Type   | Options     |
-| ------------------ | ------ | ----------- |
-| nickname           | string | null: false |
-| email              | string | null: false |
-| encrypted_password | string | null: false |
-| family_name        | string | null: false |
-| given_name         | string | null: false |
-| family_reading     | string | null: false |
-| given_reading      | string | null: false |
-| birthday           | DATE   | null: false |
+| Column             | Type   | Options                   |
+| ------------------ | ------ | ------------------------- |
+| nickname           | string | null: false               |
+| email              | string | null: false, unique: true |
+| encrypted_password | string | null: false               |
+| family_name        | string | null: false               |
+| given_name         | string | null: false               |
+| family_reading     | string | null: false               |
+| given_reading      | string | null: false               |
+| birthday           | date   | null: false               |
 
 ### Association
 
 - has_many :items
 - has_many :orders
+- has_many :addresses, through: :orders
 
 ## Itemテーブル
 
@@ -36,9 +37,23 @@
 
 - belongs_to :user
 - has_one :order
+- has_one :address, through: :order
 - has_one_attached :image
 
 ## Orderテーブル
+
+| Column             | Type       | Options                        |
+| ------------------ | ---------- | ------------------------------ |
+| user               | references | null: false, foreign_key: true |
+| item               | references | null: false, foreign_key: true |
+
+### Association
+
+- belongs_to :user
+- belongs_to :item
+- has_one :address
+
+## Addressテーブル
 
 | Column             | Type       | Options                        |
 | ------------------ | ---------- | ------------------------------ |
@@ -48,13 +63,10 @@
 | address            | string     | null: false                    |
 | apartment          | string     |                                |
 | tel                | string     | null: false                    |
-| card_number        | string     | null: false                    |
-| validated_date     | DATE       | null: false                    |
-| security_code      | string     | null: false                    |
-| user               | references | null: false, foreign_key: true |
-| item               | references | null: false, foreign_key: true |
+| order              | references | null: false, foreign_key: true |
 
 ### Association
 
-- belongs_to :user
-- belongs_to :item
+- belongs_to :order
+- belongs_to :user, through: :order
+- belongs_to :item, through: :order
