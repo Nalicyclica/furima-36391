@@ -8,10 +8,10 @@ FactoryBot.define do
     email { Faker::Internet.free_email }
     password { Faker::Internet.password(min_length: 6) }
     password_confirmation { password }
-    family_name { person.first.kanji }
-    given_name { person.last.kanji }
-    family_reading { person.first.katakana }
-    given_reading { person.last.katakana }
+    family_name { person.last.kanji }
+    given_name { person.first.kanji }
+    family_reading { person.last.katakana }
+    given_reading { person.first.katakana }
     birthday { Faker::Date.between(from: '1930-01-01', to: 5.year.ago) }
   end
 end
