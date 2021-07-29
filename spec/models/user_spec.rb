@@ -32,21 +32,37 @@ RSpec.describe User, type: :model do
       end
       it 'パスワードが必須であること。' do
         @user.password = ''
+        @user.password_confirmation = @user.password
         @user.valid?
         expect(@user.errors.full_messages).to include("Password can't be blank")
       end
       it 'パスワードは、6文字以上での入力が必須であること' do
         @user.password = 'xx2xx'
+        @user.password_confirmation = @user.password
         @user.valid?
         expect(@user.errors.full_messages).to include('Password is too short (minimum is 6 characters)')
       end
-      it 'パスワードは、半角英数字混合での入力が必須であること' do
-        @user.password = 'xxxxxxx'
+      it 'パスワードは、半角英字のみでは登録できないこと' do
+        @user.password = 'xxxxxx'
+        @user.password_confirmation = @user.password
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password must contain alphabets and numbers')
+      end
+      it 'パスワードは、半角数字のみでは登録できないこと' do
+        @user.password = '111111'
+        @user.password_confirmation = @user.password
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password must contain alphabets and numbers')
+      end
+      it 'パスワードは、全角文字では登録できないこと' do
+        @user.password = 'アイウエオか'
+        @user.password_confirmation = @user.password
         @user.valid?
         expect(@user.errors.full_messages).to include('Password must contain alphabets and numbers')
       end
       it 'パスワードとパスワード（確認）は、値の一致が必須であること。' do
-        @user.password_confirmation = 'xxxxxxx'
+        @user.password_confirmation = 'xxxxxx'
+        @user.password_confirmation = 'yyyyyy'
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
