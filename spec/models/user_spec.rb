@@ -109,7 +109,7 @@ RSpec.describe User, type: :model do
         expect(@user.errors.full_messages).to include('Given reading ONLY contains full-width katakana characters')
       end
       it '生年月日が必須であること。' do
-        @user.birthday = nil
+        @user.birthday = ''
         @user.valid?
         expect(@user.errors.full_messages).to include("Birthday can't be blank")
       end
