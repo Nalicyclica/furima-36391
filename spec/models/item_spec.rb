@@ -59,8 +59,18 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include('Price is out of range or invalid')
       end
-      it '価格は、半角数字以外の文字列では保存不可であること。' do
+      it '価格は、全角数字では保存不可であること。' do
         @item.price = '３００'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price is out of range or invalid')
+      end
+      it '価格は、半角英字では保存不可であること。' do
+        @item.price = 'price'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price is out of range or invalid')
+      end
+      it '価格は、半角英数字混合では保存不可であること。' do
+        @item.price = '300yen'
         @item.valid?
         expect(@item.errors.full_messages).to include('Price is out of range or invalid')
       end
