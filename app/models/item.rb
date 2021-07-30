@@ -10,8 +10,10 @@ class Item < ApplicationRecord
     validates :price,
               numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than: 10_000_000, allow_nil: true,
                               message: 'is out of range or invalid' }
-    validates :user_id
+    validates :user
   end
+
+  validate :item_image_attached
 
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :category
@@ -22,4 +24,10 @@ class Item < ApplicationRecord
 
   belongs_to :user
   has_one_attached :image
+
+  def item_image_attached
+    return if image.attached?
+
+    errors.add(:image, 'must be attached')
+  end
 end
