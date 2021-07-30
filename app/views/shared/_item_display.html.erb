@@ -1,5 +1,5 @@
 <li class='list'>
-  <%= link_to "#" do %>
+  <%= link_to item_path(item_display) do %>
   <div class='item-img-content'>
     <%= image_tag item_display.image, class: "item-img" if item_display.image.attached? %>
 
