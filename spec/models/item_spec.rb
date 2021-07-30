@@ -4,11 +4,13 @@ RSpec.describe Item, type: :model do
   before do
     @item = FactoryBot.build(:item)
   end
-  describe '新規登録情報の入力' do
-    it '正しい情報を入力すると、商品登録できること' do
-      expect(@item).to be_valid
+  describe '商品登録情報の入力' do
+    context '商品出品ができる時' do
+      it '正しい情報を入力すると、商品登録できること' do
+        expect(@item).to be_valid
+      end
     end
-    describe '商品登録情報のバリデーション' do
+    context '商品出品ができない時' do
       it '商品名が必須であること。' do
         @item.title = ''
         @item.valid?
