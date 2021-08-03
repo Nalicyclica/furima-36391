@@ -20,8 +20,4 @@ class OrderAddress
     Address.create(post_number: post_number, prefecture_id: prefecture_id, city: city, address: address, apartment: apartment,
                    tel: tel, order_id: order.id)
   end
-
-  def ordered_item
-    Item.find(item_id)
-  end
 end
