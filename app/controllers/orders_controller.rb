@@ -1,6 +1,8 @@
 class OrdersController < ApplicationController
+  before_action :authenticate_user!
+  before_action :item_find
+  before_action :item_order_restriction
   def index
-    @item = Item.find(params[:item_id])
     @order_address = OrderAddress.new
   end
 
@@ -11,7 +13,6 @@ class OrdersController < ApplicationController
       @order_address.save
       redirect_to root_path
     else
-      @item = Item.find(params[:item_id])
       render :index
     end
   end
@@ -31,5 +32,13 @@ class OrdersController < ApplicationController
       card: order_address.token,
       currency: 'jpy'
     )
+  end
+
+  def item_find
+    @item = Item.find(params[:item_id])
+  end
+
+  def item_order_restriction
+    redirect_to root_path if @item.user.id == current_user.id || @item.order.present?
   end
 end
