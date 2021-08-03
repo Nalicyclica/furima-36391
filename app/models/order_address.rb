@@ -6,16 +6,18 @@ class OrderAddress
     validates :user_id
     validates :item_id
 
-    validates :post_number
+    validates :post_number, format: { with: /\A\d{3}-\d{4}\z/, allow_blank: true, message: 'must be xxx-xxxx' }
     validates :prefecture_id
     validates :city
     validates :address
 
-    validates :tel
+    validates :tel, format: { with: /\A\d{10,11}\z/, allow_blank: true, message: 'must be 10 or 11 digits number' }
     validates :order_id
   end
 
   def save
+    return unless valid?
+
     order = Order.create(user_id: user_id, item_id: item_id)
     Address.create(post_number: post_number, prefecture_id: prefecture_id, city: city, address: address, apartment: apartment,
                    tel: tel, order_id: order.id)
