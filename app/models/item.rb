@@ -23,6 +23,7 @@ class Item < ApplicationRecord
   belongs_to :expected_waiting
 
   belongs_to :user
+  has_one :order
   has_one_attached :image
 
   def item_image_attached
