@@ -55,6 +55,6 @@ class ItemsController < ApplicationController
   end
 
   def item_edit_restriction
-    redirect_to root_path unless @item.user_id == current_user.id && @item.order.blank?
+    redirect_to root_path if @item.user_id != current_user.id || @item.order.present?
   end
 end
